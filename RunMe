@@ -1,0 +1,38 @@
+#!/bin/bash
+set -uex
+
+#for i in /etc/profile.d/*.sh /etc/profile.d/sh.local ; do
+#    if [ -r "$i" ]; then
+#        if [ "${-#*i}" != "$-" ]; then 
+#            . "$i"
+#        else
+#            . "$i" >/dev/null
+#        fi
+#    fi  
+#done
+
+
+
+if [ ! -d './Scripts' ]; then
+    >&2 echo "Scripts directory not found.
+Please run mkdir -p `dirname $0`/Scripts"
+    exit 1
+fi
+
+export B2_ACCOUNT_ID=768f7e85fb7f
+export B2_ACCOUNT_KEY=00294328c6ef5ea70c0061d4f611e9029fd317ce39
+export RESTIC_PASSWORD='cell00highway'
+
+for i in ./Scripts/*.sh; do  
+
+    if [ -r "$i" ]; then
+        if [ "${-#*i}" != "$-" ]; then 
+            . "$i"
+        else
+            . "$i" >/dev/null
+        fi
+    fi  
+    
+done
+
+
