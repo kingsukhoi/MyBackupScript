@@ -11,17 +11,21 @@ set -uex
 #    fi  
 #done
 
+# import backblaze keys from a file named BackBlazeKeys
+if [ ! -r ./BackBlazeKeys ] && [ ! -f ./BackBlazeKeys ]; then
+    (>&2 echo "BackBlazeKeys not found")
+    exit 1
+fi
+
+source ./BackBlazeKeys
 
 
 if [ ! -d './Scripts' ]; then
     >&2 echo "Scripts directory not found.
-Please run mkdir -p `dirname $0`/Scripts"
+Please run mkdir -p `dirname $0`/Scripts and add some scripts with the .sh extention"
     exit 1
 fi
 
-export B2_ACCOUNT_ID=768f7e85fb7f
-export B2_ACCOUNT_KEY=00294328c6ef5ea70c0061d4f611e9029fd317ce39
-export RESTIC_PASSWORD='***REMOVED***'
 
 for i in ./Scripts/*.sh; do  
 
