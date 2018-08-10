@@ -1,5 +1,5 @@
 #!/bin/bash
-set -uex
+set -ue
 
 #for i in /etc/profile.d/*.sh /etc/profile.d/sh.local ; do
 #    if [ -r "$i" ]; then
@@ -18,11 +18,11 @@ if [ ! -r ./BackBlazeKeys ] && [ ! -f ./BackBlazeKeys ]; then
 fi
 
 source ./BackBlazeKeys
-
+export REPO_LOC='-r b2:BullBlackBackup backup'
 
 if [ ! -d './Scripts' ]; then
-    >&2 echo "Scripts directory not found.
-Please run mkdir -p `dirname $0`/Scripts and add some scripts with the .sh extention"
+    (>&2 echo "Scripts directory not found.
+    Please run mkdir -p `dirname $0`/Scripts and add some scripts with the .sh extention")
     exit 1
 fi
 
