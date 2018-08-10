@@ -1,6 +1,8 @@
 #!/bin/bash
 set -ue
 
+whereami="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
 #for i in /etc/profile.d/*.sh /etc/profile.d/sh.local ; do
 #    if [ -r "$i" ]; then
 #        if [ "${-#*i}" != "$-" ]; then 
@@ -12,28 +14,29 @@ set -ue
 #done
 
 # import backblaze keys from a file named BackBlazeKeys
-if [ ! -r ./.env ] && [ ! -f ./.env ]; then
+if [ ! -r "$whereami/.env" ] && [ ! -f "$whereami/.env" ]; then
 	(>&2 echo 'enviroment file (.env) not found')
     exit 1
 fi
 
-source ./.env
+source "$whereami/.env"
 #export REPO_LOC='-r b2:BullBlackBackup backup'
 
-if [ ! -d './Scripts' ]; then
-    (>&2 echo "Scripts directory not found.
-    Please run mkdir -p `dirname $0`/Scripts and add some scripts with the .sh extention")
+if [ ! -d "$whereami/Scripts" ]; then
+	echo $whereami/Scripts
+    	(>&2 echo "Scripts directory not found.
+Please run mkdir -p `dirname $0`/Scripts and add some scripts with the .sh extention")
     exit 1
 fi
 
 
-for i in ./Scripts/*.sh; do  
+for i in "$whereami/Scripts/*.sh"; do  
 
     if [ -r "$i" ]; then
         if [ "${-#*i}" != "$-" ]; then 
             . "$i"
         else
-            . "$i" >/dev/null
+            . "$i" 
         fi
     fi  
     
