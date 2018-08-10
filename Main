@@ -30,13 +30,16 @@ Please run mkdir -p `dirname $0`/Scripts and add some scripts with the .sh exten
 fi
 
 
-for i in "$whereami/Scripts/*.sh"; do  
+for i in $whereami/Scripts/*.sh; do  
 
+	echo "Running $i"
     if [ -r "$i" ]; then
         if [ "${-#*i}" != "$-" ]; then 
-            . "$i"
+		echo "Running $i in first if"
+    		. "$i"
         else
-            . "$i" 
+		echo "Running $i in second if"
+		. "$i" 
         fi
     fi  
     
