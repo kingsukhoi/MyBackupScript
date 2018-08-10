@@ -1,0 +1,3 @@
+
+restic $REPO_LOC backup --exclude *.iso --exclude *.mp3 --exclude *.ogg /home/
+
