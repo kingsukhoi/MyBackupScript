@@ -12,13 +12,13 @@ set -ue
 #done
 
 # import backblaze keys from a file named BackBlazeKeys
-if [ ! -r ./BackBlazeKeys ] && [ ! -f ./BackBlazeKeys ]; then
-    (>&2 echo "BackBlazeKeys not found")
+if [ ! -r ./.env ] && [ ! -f ./.env ]; then
+	(>&2 echo 'enviroment file (.env) not found')
     exit 1
 fi
 
-source ./BackBlazeKeys
-export REPO_LOC='-r b2:BullBlackBackup backup'
+source ./.env
+#export REPO_LOC='-r b2:BullBlackBackup backup'
 
 if [ ! -d './Scripts' ]; then
     (>&2 echo "Scripts directory not found.
