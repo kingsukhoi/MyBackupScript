@@ -20,7 +20,13 @@ if [ ! -r "$whereami/.env" ] && [ ! -f "$whereami/.env" ]; then
 fi
 
 source "$whereami/.env"
-#export REPO_LOC='-r b2:BullBlackBackup backup'
+
+if [ "$#" -eq "2" ]; then
+	if [ "$1" = "-f" ]; then 
+		source "$2"
+		exit $?
+	fi
+fi
 
 if [ ! -d "$whereami/Scripts" ]; then
 	echo $whereami/Scripts
@@ -45,4 +51,5 @@ for i in $whereami/Scripts/*.sh; do
     
 done
 
-
+restic forget --prune --keep-weekly 5 --keep-monthly 6 --keep-yearly 100
+restic check
