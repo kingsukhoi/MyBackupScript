@@ -1,1 +1,1 @@
-mysqldump --all-databases -u root -p'***REMOVED***'  | restic backup --tag db --stdin --stdin-filename mariadb.sql
+mysqldump --all-databases -u root -p'***REMOVED***' > $TEMP_DIR/mariadbbackup.sql
