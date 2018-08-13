@@ -3,17 +3,7 @@ set -ue
 
 whereami="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-#for i in /etc/profile.d/*.sh /etc/profile.d/sh.local ; do
-#    if [ -r "$i" ]; then
-#        if [ "${-#*i}" != "$-" ]; then 
-#            . "$i"
-#        else
-#            . "$i" >/dev/null
-#        fi
-#    fi  
-#done
-
-# import backblaze keys from a file named BackBlazeKeys
+# import backblaze keys from a file named .env
 if [ ! -r "$whereami/.env" ] && [ ! -f "$whereami/.env" ]; then
 	(>&2 echo 'enviroment file (.env) not found')
     exit 1
@@ -35,7 +25,8 @@ Please run mkdir -p `dirname $0`/Scripts and add some scripts with the .sh exten
     exit 1
 fi
 
-
+# everything in here should backup to a tmp directory specified in the env var below
+export TEMP_DIR=/tmp/backup
 for i in $whereami/Scripts/*.sh; do  
 
 	echo "Running $i"
@@ -50,6 +41,11 @@ for i in $whereami/Scripts/*.sh; do
     fi  
     
 done
+
+PathsToInclude=$(cat "$whereami/PathsToBackup" | xargs)
+PathsToIgnore=$(cat "$whereami/PathsToIgnore" | xargs)
+
+restic backup --exclude-caches --exclude "$PathsToIgnore" "$PathsToInclude"  
 
 restic forget --prune --keep-weekly 5 --keep-monthly 6 --keep-yearly 100
 restic check
