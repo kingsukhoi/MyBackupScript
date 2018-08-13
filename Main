@@ -45,7 +45,7 @@ done
 PathsToInclude=$(cat "$whereami/PathsToBackup" | xargs)
 PathsToIgnore=$(cat "$whereami/PathsToIgnore" | xargs)
 
-restic backup --exclude-caches --exclude "$PathsToIgnore" "$PathsToInclude"  
+restic backup --exclude-caches --exclude "$PathsToIgnore" "$PathsToInclude" "$TEMP_DIR"
 
 restic forget --prune --keep-weekly 5 --keep-monthly 6 --keep-yearly 100
 restic check
