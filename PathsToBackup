@@ -1,0 +1,9 @@
+/opt/FarsosContainerManager/
+/opt/gogs/custom/conf 
+/opt/gogs/data
+/var/gogs
+/home/
+/etc/letsencrypt/
+/etc/nginx/
+/var/seafile/
+/opt/seafile/conf/
