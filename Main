@@ -1,6 +1,20 @@
 #!/bin/bash
 set -ue
 
+clean_up (){
+	restic check
+	rm -rf $TEMP_DIR
+	rm -f /var/run/BullBlackBackup.pid
+}
+
+trap clean_up INT
+
+if [ -f /var/run/BullBlackBackup.pid ]; then 
+	exit 0
+else
+	touch /var/run/BullBlackBackup.pid
+	echo $$ >> /var/run/BullBlackBackup.pid
+fi
 						      
 whereami="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
@@ -51,5 +65,4 @@ restic backup --exclude-file="$whereami/PathsToIgnore" --files-from "$whereami/P
 
 #restic backup --exclude-caches --exclude-file "$whereami/PathsToIgnore" "$TEMP_DIR" "$PathsToInclude" 
 restic forget --prune --keep-weekly 5 --keep-monthly 6 --keep-yearly 100
-restic check
-rm -rf $TEMP_DIR
+clean_up
