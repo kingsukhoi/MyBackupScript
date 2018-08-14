@@ -1,5 +1,6 @@
 /etc/ddclient.conf
 /etc/letsencrypt/
+/etc/named.conf
 /etc/nginx/
 /home/
 /opt/FarsosContainerManager/
@@ -8,4 +9,5 @@
 /opt/seafile/conf/
 /var/gogs
 /var/lib/docker/volumes/mayandata/_data
+/var/named/
 /var/seafile/
