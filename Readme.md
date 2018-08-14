@@ -1,8 +1,9 @@
 # Farsos Backup solution
 
-## Current Solution
+## Current Solution 
 
 Use a scripts directory to put the databse dump files somewhere and use a BackupFile and an ExcludeFile that contains a bunch of paths and backup everything in one command.
+Restic has a command that takes paths from a file so we using that.
 
 Reason:
 Lets say I back up `/var/test1`, `/var/test2`, `/etc/test3`, `/opt/test4`.
