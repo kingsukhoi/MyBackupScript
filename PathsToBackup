@@ -1,9 +1,10 @@
+/etc/letsencrypt/
+/etc/nginx/
+/home/
 /opt/FarsosContainerManager/
 /opt/gogs/custom/conf 
 /opt/gogs/data
-/var/gogs
-/home/
-/etc/letsencrypt/
-/etc/nginx/
-/var/seafile/
 /opt/seafile/conf/
+/var/gogs
+/var/lib/docker/volumes/mayandata/_data
+/var/seafile/
