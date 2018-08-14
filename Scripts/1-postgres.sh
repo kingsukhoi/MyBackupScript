@@ -1,1 +1,1 @@
-docker exec PostgresDB pg_dumpall -U postgres > $TEMP_DIR/mariadbbackup.sql
+docker exec PostgresDB pg_dumpall -U postgres > $TEMP_DIR/postgresdbbackup.sql
