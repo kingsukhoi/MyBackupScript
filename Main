@@ -63,7 +63,8 @@ run_backup() {
 	restic backup --exclude-file="$whereami/PathsToIgnore" --files-from "$whereami/PathsToBackup" "$TEMP_DIR"
 }
 run_prune() {
-	restic forget --prune --keep-weekly 5 --keep-monthly 6 --keep-yearly 100
+	restic forget --keep-weekly 5 --keep-monthly 6 --keep-yearly 100
+	restic prune
 }
 
 process_args() {
