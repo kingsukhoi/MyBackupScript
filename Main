@@ -1,6 +1,8 @@
 #!/bin/bash
 set -ue
 
+whereami="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
 clean_up (){
 	restic check
 	rm -rf $TEMP_DIR
@@ -9,60 +11,86 @@ clean_up (){
 
 trap clean_up INT
 
-if [ -f /var/run/BullBlackBackup.pid ]; then 
-	exit 0
-else
-	touch /var/run/BullBlackBackup.pid
-	echo $$ >> /var/run/BullBlackBackup.pid
-fi
-						      
-whereami="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-
-# import backblaze keys from a file named .env
-if [ ! -r "$whereami/.env" ] && [ ! -f "$whereami/.env" ]; then
-	(>&2 echo 'enviroment file (.env) not found')
-    exit 1
-fi
-
-source "$whereami/.env"
-
-if [ "$#" -eq "2" ]; then
-	if [ "$1" = "-f" ]; then 
-		source "$2"
-		exit $?
+make_pid_file (){
+	if [ -f /var/run/BullBlackBackup.pid ]; then 
+    		(>&2 echo "Either another instance of this script is running, or someone forgot to clean up the pidfile")
+		exit 1
+	else
+		touch /var/run/BullBlackBackup.pid
+		echo $$ >> /var/run/BullBlackBackup.pid
 	fi
-fi
+}
 
-if [ ! -d "$whereami/Scripts" ]; then
-	echo $whereami/Scripts
-    	(>&2 echo "Scripts directory not found.
+import_env_file(){
+# import backblaze keys from a file named .env
+	if [ ! -r "$whereami/.env" ] && [ ! -f "$whereami/.env" ]; then
+		(>&2 echo 'enviroment file (.env) not found')
+    		exit 1
+	fi
+	source "$whereami/.env"
+}
+
+find_scripts_dir (){
+	if [ ! -d "$whereami/Scripts" ]; then
+    		(>&2 echo "Scripts directory not found.
 Please run mkdir -p `dirname $0`/Scripts and add some scripts with the .sh extention")
-    exit 1
-fi
+    	exit 1
+	fi
+}
+create_temp_dir (){
 
-# everything in here should backup to a tmp directory specified in the env var below
-export TEMP_DIR="/tmp/backup"
-mkdir -p "$TEMP_DIR"
-for i in $whereami/Scripts/*.sh; do  
+	export TEMP_DIR="/tmp/FarsosBackupScript"
+	mkdir -p "$TEMP_DIR"
 
-	echo "Running $i"
-    if [ -r "$i" ]; then
-        if [ "${-#*i}" != "$-" ]; then 
-		echo "Running $i in first if"
-    		. "$i"
-        else
-		echo "Running $i in second if"
-		. "$i" 
-        fi
-    fi  
+}
+run_scripts (){
+	# everything in here should backup to a tmp directory specified in the env var below
+	for i in $whereami/Scripts/*.sh; do  
+		echo "Running $i"
+    		if [ -r "$i" ]; then
+        		if [ "${-#*i}" != "$-" ]; then 
+				echo "Running $i in first if"
+    				. "$i"
+        		else
+				echo "Running $i in second if"
+				. "$i" 
+        		fi
+    		fi  
     
-done
+	done
+}
+run_backup() {
+	restic backup --exclude-file="$whereami/PathsToIgnore" --files-from "$whereami/PathsToBackup" "$TEMP_DIR"
+}
+run_prune() {
+	restic forget --prune --keep-weekly 5 --keep-monthly 6 --keep-yearly 100
+}
 
-PathsToInclude=$(cat "$whereami/PathsToBackup" | xargs)
-#PathsToIgnore=$(cat "$whereami/PathsToIgnore" | sed 's:^:--exclude :g' | xargs)
+process_args() {
+	while :; do
+        	case $1 in
+        		backup)
+				find_scripts_dir
+				create_temp_dir
+				run_scripts
+				mun_backup
+				break
+				;;
+			prune)
+				run_prune
+				break
+				;;
+			*) # Done
+				break
+        esac
+        shift
+    done	
+}
 
-restic backup --exclude-file="$whereami/PathsToIgnore" --files-from "$whereami/PathsToBackup" "$TEMP_DIR"
-
-#restic backup --exclude-caches --exclude-file "$whereami/PathsToIgnore" "$TEMP_DIR" "$PathsToInclude" 
-restic forget --prune --keep-weekly 5 --keep-monthly 6 --keep-yearly 100
-clean_up
+main() {
+	make_pid_file
+	import_env_file
+	process_args $@
+	clean_up
+}
+main $@
