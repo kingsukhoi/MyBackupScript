@@ -2,6 +2,7 @@
 set -ue
 
 whereami="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+export TEMP_DIR="/tmp/FarsosBackupScript"
 
 clean_up (){
 	restic check
@@ -39,7 +40,6 @@ Please run mkdir -p `dirname $0`/Scripts and add some scripts with the .sh exten
 }
 create_temp_dir (){
 
-	export TEMP_DIR="/tmp/FarsosBackupScript"
 	mkdir -p "$TEMP_DIR"
 
 }
@@ -73,7 +73,7 @@ process_args() {
 				find_scripts_dir
 				create_temp_dir
 				run_scripts
-				mun_backup
+				run_backup
 				break
 				;;
 			prune)
