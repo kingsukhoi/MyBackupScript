@@ -2,13 +2,14 @@
 /etc/letsencrypt/
 /etc/named.conf
 /etc/nginx/
-/etc/yum.repos.d
+/etc/yum.repos.d/
 /home/
 /opt/FarsosContainerManager/
 /opt/gogs/custom/conf 
-/opt/gogs/data
+/opt/gogs/data/
 /opt/seafile/conf/
-/var/gogs
+/var/gogs/
 /var/lib/docker/volumes/mayandata/_data
+/var/log/
 /var/named/
 /var/seafile/
