@@ -71,6 +71,7 @@ process_args() {
 	while :; do
         	case $1 in
         		backup)
+				make_pid_file
 				find_scripts_dir
 				create_temp_dir
 				run_scripts
@@ -78,7 +79,13 @@ process_args() {
 				break
 				;;
 			prune)
+				make_pid_file
 				run_prune
+				break
+				;;
+			clean)
+				clean_up
+				exit 0
 				break
 				;;
 			*) # Done
@@ -89,7 +96,6 @@ process_args() {
 }
 
 main() {
-	make_pid_file
 	import_env_file
 	process_args $@
 	clean_up
