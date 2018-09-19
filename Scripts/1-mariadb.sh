@@ -1,1 +1,1 @@
-mysqldump --all-databases -u root -p'cell00highway' > $TEMP_DIR/mariadbbackup.sql
+mysqldump --all-databases -u root  > $TEMP_DIR/mariadbbackup.sql
