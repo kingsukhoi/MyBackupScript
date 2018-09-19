@@ -1,0 +1,5 @@
+export B2_ACCOUNT_ID="account id here"
+export B2_ACCOUNT_KEY="account key here"
+export RESTIC_REPOSITORY="Your Repo Here"
+export RESTIC_PASSWORD="Your Password Here"
+export MYSQL_PWD="mysql user password here"
