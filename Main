@@ -3,11 +3,11 @@ set -ue
 
 whereami="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 export TEMP_DIR="/tmp/FarsosBackupScript"
-
+PID_FILE="/var/run/BullBlackBackup.pid"
 clean_up (){
 	restic check
 	rm -rf $TEMP_DIR
-	rm -f /var/run/BullBlackBackup.pid
+	rm -f $PID_FILE
 }
 
 trap clean_up INT
